@@ -301,7 +301,7 @@
 
     <script type="text/javascript">
         master_data = []
-        d3.csv("ks-projects-R1.csv", function(error, data) {
+        d3.csv("/ks-projects-R1.csv", function(error, data) {
           if (error) throw error;
           master_data = data;
           data_ready();
