@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Visualization of Startup's</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script type="text/javascript" src="http://d3js.org/d3.v4.min.js"></script>
+    <style>
+        #header{
+            width: 101.4%;
+            height: 50px;
+            margin-top: -16px;
+            margin-left: -10px;
+            background-color: #2d4b65;
+            overflow: hidden
+        }
+        .menu{
+            overflow: hidden;
+            margin-left: -15px;
+        }
+
+        .menu li{
+            list-style: none;
+            float: left;
+            margin-top: 5px;
+            margin-right: 16px;
+            font-family: Arial;
+            color: white;
+            font-size: 16px;
+            
+        }
+
+        .menu li:hover{
+            text-decoration: underline;
+        }
+
+        .menu li a{
+            color: white;
+            text-decoration: none !important;
+        }
+
+        .menu li a:hover{
+            color: rgb(182, 182, 162);
+        }
+
+        #start-logo{
+            float: right;
+            font-family: Arial;
+            color: white;
+            font-size: 16px;
+            margin-right: 3%;
+            margin-top: 20px;
+        }
+
+        #intro{
+            height: 110%; width: 100%; float: left; overflow: hidden; margin-top:10px;
+        }
+
+        #intro-anno{
+            float: left; font-family: Arial; height: 100%; width: 50%;font-size: 16px;
+        }
+
+        #intro-img{
+            float:right; width: 50%; height: 100%;
+        }
+
+        #filter_box {
+            margin-top: -450px;
+            margin-left: 730px;
+            width: 110px;
+            visibility: hidden;
+            font-family: Arial;
+            font-size: 12px;
+        }
+
+        #successrate {
+            font: 12px Arial;
+            margin: 10px;
+        }
+
+        .treeRect:hover{
+            stroke: black;
+        }
+
+        .bar:hover{
+            stroke: black;
+        }
+
+        #tree_box {
+            margin-top: -450px;
+            margin-left: 620px;
+            width: 150px;
+        }
+
+        .circle {
+            background-color:#fff;
+            border:1px solid red;    
+            height:20px;
+            border-radius:50%;
+            -moz-border-radius:50%;
+            -webkit-border-radius:50%;
+            width: 20px;
+          }
+
+        #trend {
+            font: 12px Arial;
+            margin-left: 20px;
+        }
+
+        #aboutviz{
+            font: 12px Arial;
+            margin-left: 20px;
+            margin-top: -8px;
+            width: 97%;
+            height: 100%;
+        }
+    </style>
+</head>
+<body>
+    <script type="text/javascript">
+        function home_clicked() {
+            document.getElementById('intro').style.display = 'block';
+            document.getElementById('category').style.display = 'none';
+            document.getElementById('successrate').style.display = 'none';
+            document.getElementById('trend').style.display = 'none';
+            document.getElementById('aboutviz').style.display = 'none';
+        }
+
+        function categories_clicked() {
+            document.getElementById('intro').style.display = 'none';
+            document.getElementById('category').style.display = 'block';
+            document.getElementById('successrate').style.display = 'none';
+            document.getElementById('trend').style.display = 'none';
+            document.getElementById('aboutviz').style.display = 'none';
+        }
+
+        function success_clicked() {
+            document.getElementById('intro').style.display = 'none';
+            document.getElementById('category').style.display = 'none';
+            document.getElementById('successrate').style.display = 'block';
+            document.getElementById('trend').style.display = 'none';
+            document.getElementById('aboutviz').style.display = 'none';
+        }
+
+        function trend_clicked() {
+            document.getElementById('intro').style.display = 'none';
+            document.getElementById('category').style.display = 'none';
+            document.getElementById('successrate').style.display = 'none';
+            document.getElementById('trend').style.display = 'block';
+            document.getElementById('aboutviz').style.display = 'none';
+        }
+
+        function about_clicked() {
+            document.getElementById('intro').style.display = 'none';
+            document.getElementById('category').style.display = 'none';
+            document.getElementById('successrate').style.display = 'none';
+            document.getElementById('trend').style.display = 'none';
+            document.getElementById('aboutviz').style.display = 'block';
+        }
+
+    </script>
+    <div id="header">
+        <div style="float: left;">
+            <ul class="menu">
+                <li><a id='home' onclick="home_clicked()" href="#">HOME</a></li>
+                <li><a id='categories' onclick="categories_clicked()" href="#">CATEGORIES</a></li>
+                <li><a id='success' onclick="success_clicked()" href="#">SUCCESS RATE</a></li>
+                <li><a id='trendz' onclick="trend_clicked()" href="#">TREND</a></li>
+                <li><a id='about' onclick="about_clicked()" href="#">ABOUT THE VISUALIZATION</a></li>
+            </ul>
+        </div>
+        <div onclick="home_clicked()" id="start-logo">
+            <span style="cursor: pointer;"> STORY OF STARTUP'S </span>
+        </div>
+        <div>
+            <img src="light-bulb-7.png" style="width: 37px;float: right; margin-top: 9px;" />
+        </div>
+    </div>
+    <div id="intro">
+        <div id="intro-anno">
+            <div style="padding : 0 50px 50px 50px; ">
+                <h1>A tale of startup's in the US between the years 2013 and 2017</h1>
+                <p>There has been a number of startup's coming in different industries in the United States that are aiming to meet a need. 
+                    Here, we try to throw some light on these entrepreneurial venture's and gain some insights.</p>
+
+                <p> This interactive visualization focuses on: </p>
+                <ul>
+                    <li style="margin: -4px 0 4px 0px;">Visually exploring the categories or the industries where most of these startup's are into.</li>
+                    <li style="margin: 0 0 4px 0px;">Visualizing the how many of these startup's are successful in each category.</li>
+                    <li>The trend of these startup's from the year 2013 to 2017.</li>
+                </ul>
+                <p>We will visualize the startup's data in different directions using different charts. The charts are best viewed in Google Chrome.</p>
+            </div>
+        </div>
+        <div id="intro-img" >
+            <img src="Startup_1.jpg" style="width: 100%; height: 500px; opacity: 0.8;"/>
+        </div>
+    </div>
+
+    <div id="category" style="display: none;">
+        <svg id = 'barchart'></svg>
+        <fieldset id ='filter_box'>
+            <legend>Startup Status</legend>
+            <input  type="checkbox" name="canceled" value="canceled" class="stat_filter" checked ="checked" onchange="data_ready()">Canceled<br/>
+            <input  type="checkbox" name="failed" value="failed" class="stat_filter" checked ="checked" onchange="data_ready()">Failed<br/>
+            <input  type="checkbox" name="successful" value="successful" class="stat_filter" checked ="checked" onchange="data_ready()">Successful<br/>
+            <input  type="checkbox" name="suspended" value="suspended" class="stat_filter" checked ="checked" onchange="data_ready()">Suspended
+        </fieldset>
+        <div style="font-size: 14px;font-family: Arial; width: 350px;float: right;">
+            <h2>Startup's by Category</h2>
+            <p>Let's first explore the startup's based on the categories and their current status and we use a bar chart to do this.</p>
+            <p>As shown in the chart the startup's mainly fall into 15 categories. Each bar in the chart
+                represents a category and each of them has a unique color. The Film & Video industry
+                has seen the most number of startup's during the period of 2013 - 2017 while the Dance the least.
+            </p>
+            <p>Not all the startup's were successful, few of them were either canceled or failed or suspended.
+                We can visualize the startup's based on their status using the checkboxes provided. User can interact
+                with the data by selecting or unselecting the checkbox's and it will update the chart accordingly. 
+            </p>
+        </div>
+    </div>
+
+    <div id="successrate" style="display: none;">
+        <h2> STARTUP'S SUCCESS RATE</h2><br />
+        <svg id="svg_success" width="600" height="450"></svg>
+        <fieldset id ='tree_box'>
+            <legend>Success/Total</legend>
+            <label><input type="radio" name="mode" value="sumBySuccess_rate" checked>Success Rate</label> <br />
+            <label><input type="radio" name="mode" value="sumByCount">Number of Startup's</label>
+        </fieldset>
+        <div style="font-size: 14px;font-family: Arial; width: 400px;float: right; margin-right: 50px;">
+            <h2>Success Rate of Startup's</h2>
+            <p>Let's explore the startup's based on the number of startup's in each cateogry and their success rate and we 
+                use a Tree map to do this.
+            </p>
+            <p>The industry that has a better successrate will be brighter in color. Though the dancing field has less number of startup's. 
+                Though it has less number of startup's it has an impressive success rate and it is the brightest block in the chart. 
+                On the other hand Journalism has the least successrate.
+            </p>
+            <p>The radio buttons that we see are used to switch between successrate view and the number of startup's view.
+            </p>
+        </div>
+    </div>
+
+    <div id="trend" style="display: none;">
+        <h2 style="padding-left: 120px">STARTUP'S TREND FROM 2013 to 2017</h2>
+        <svg id="svg_trend" width="600" height="400"></svg>
+        <div style="margin-top: -339px; margin-left: 304px;">
+            <span style="float: left; padding-left: 30px;">The number of startup's has reached <br /> a maximum of 53,543 in the year 2015.</span>
+            <div class="circle" ></div>
+        </div>
+        <div style="margin-top: 218px; margin-left: 479px;">
+            <span style="float: left; padding-left: 30px;">In the year 2017 the number of <br /> startup's has decreased to 31,221.</span>
+            <div class="circle"></div>
+        </div>
+        <div style="font-size: 14px;font-family: Arial; width: 400px;float: right;margin-top: -250px; margin-right: 100px;">
+            <h2>Trend of the Startup's</h2>
+            <p>Finally we see the trend of the startup's during 2013 - 2017. We use a line chart to show the trend and 
+                also we highlight the interesting observations.
+            </p>
+            <p>We see that there is an increase in the number of startup's from 2013 to 2015 and then there is a decrease in 
+                the startup's from 2015 to 2017.
+            </p>
+        </div>
+    </div>
+
+    <div id="aboutviz" style="display: none;">
+        <h1>About the Visualization</h1>
+        <p>This Visualization tries to give some insights on the startup's in the US using the data available 
+            <a href="https://www.kaggle.com/kemical/kickstarter-projects" target="_blank">here</a>. This project is 
+            built using D3.js, HTML, CSS and Javascript. This project is best viewed in <b>Google Chrome</b> browser and 
+            small screens are not recommended as they may not display the content properly.</p>
+        <h3>Narrative Visualization</h3>
+        <p>This project follows a hybrid interactive slideshow structure. Each screen provides a breif overview to help 
+            the user and also highlight's interesting observations. The charts use different colors to differentiate items 
+            and also hover text is provided for more information.</p>
+        <h3>Scenes</h3>
+        <p>In this project different links/buttons have been provided to help user navigate between different scenes/screens 
+            having respective content in it and this seems to be a simple and user friendly approach and this is done using 
+            javascript, html and css. The charts are developed using D3.js and a bar chart, a tree map and a line chart are 
+            used in this project to visualize the data. This follows a similar structure and layout in all the screens for consistency.</p>
+        <h3>Annotations</h3>
+        <p>A text overview is provided in all the screens to help user easily understand what is being shown. The trend chart also has 
+            text or annotations on the chart to highlight certain observations.
+        </p>
+        <h3>Parameters</h3>
+        <p>Different parameters have been used in the visualization.<br />
+            <li>Startup's count based on the category.</li>
+            <li>The success rate of startups in each category.</li>
+            <li>The count of startup's based on their status.</li>
+            <li>The startup's in each year.</li>
+        </p>
+        <h3>Triggers</h3>
+        <p>Triggers are effectively used in this project to navigate between different sections. The filters provided beside the charts
+            update the chart based on the user selected criteria and this uses the concept of triggers. </p>
+        <h3>Author</h3>
+        <p>This project is developed by <a href="https://www.linkedin.com/in/karthikbatchu/" target="_blank">Karthik Batchu</a> as part of CS 498: Data Visualization course 
+            from UIUC.</p>
+    </div>
+
+    <script type="text/javascript">
+        master_data = []
+        d3.csv("ks-projects-R1.csv", function(error, data) {
+          if (error) throw error;
+          master_data = data;
+          data_ready();
+          plot_trend();
+        });
+
+        function data_ready(){
+            var selected_status = get_status();
+            
+            var category_count = d3.nest()
+                                 .key(function(d){ return d.main_category})
+                                 .rollup(function(v) { return v.length})
+                                 .entries(master_data.filter(function(d){return selected_status.indexOf(d.state) > -1}));
+
+            category_count.sort(function(a, b){return b.value - a.value})
+
+            var svg = d3.select('#barchart').html('');
+
+            svg.attr('height', 500).attr('width', 900);
+            
+            var margin = {top: 50, right: 20, bottom: 30, left: 100},
+                width = +svg.attr("width") - margin.left - margin.right,
+                height = +svg.attr("height") - margin.top - margin.bottom;
+
+            var x = d3.scaleBand().range([0, width]).padding(0.5),
+                y = d3.scaleLinear().range([height, 0]);
+            
+            var color = {"Film & Video" : "#b49936", "Music" : "#dd555c", "Publishing" : "#79706e", "Games" : "#4f9894", "Technology" : "#b9b0ac", 
+                         "Design" : "#5ca252", "Food" : "#efce69", "Art" : "#5279a6", "Fashion" : "#8fd280", "Comics" : "#a3cbe7", 
+                         "Crafts" : "#ee8d37", "Photography" : "#fc9c9b", "Theater" : "#d07195", "Journalism" : "#89bcb6", "Dance" : "#fcbe81"}
+            var xDomain = [];
+            var yDomain = [];
+
+            d3.values(category_count).forEach(function(d){xDomain.push(d.key); yDomain.push(d.value)});
+
+            x.domain(xDomain);
+            y.domain([0, d3.max(yDomain)]);
+
+            var g = svg.append('g');
+            g.attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
+
+            g.append('g')
+            .attr("transform", "translate(0," + height + ")")
+            .call(d3.axisBottom(x));
+
+            g.append("g")
+            .attr("class", "axis axis--y")
+            .call(d3.axisLeft(y))
+            .append('text')
+            .attr("transform", "rotate(-90)")
+            .attr("dy", "0.71em")
+            .attr("text-anchor", "end")
+            .text('Frequency');
+            
+
+             g.selectAll('rect')                
+                        .data(category_count)
+                        .enter().append('rect')                
+                        .attr("x", function(d) { return x(d.key); })
+                        .on("mouseover", function(d){
+                            d3.select(this).style("fill", function() {
+                                return d3.rgb(d3.select(this).style("fill")).darker(0.5);
+                            });
+                        })
+                        .on("mouseout", function(d){
+                            d3.select(this).style("fill", function() {
+                                return d3.rgb(d3.select(this).style("fill")).brighter(0.5);
+                            });
+                        })
+                        .transition()
+                        .duration(1000)                
+                        .attr("y", function(d) { return y(d.value); })
+                        .attr('height', function(d){return height -  y(d.value)})
+                        .attr('width', 40)
+                        .attr('fill', function(d){return color[d.key]})
+                        .attr('class', 'bar');
+
+            g.selectAll('rect').append('title').text(function(d){ return "Number of startup's: " + d.value});
+            
+
+            g.append("text")
+                .attr("x", (width / 2))             
+                .attr("y", (0 - margin.top / 2))
+                .attr("text-anchor", "middle")  
+                .style("font-size", "26px") 
+                .style("font-family", "Arial")  
+                .text("Number of Startup's by Category");
+
+            g.append("text")
+                .attr("text-anchor", "middle") 
+                .attr("transform", "translate("+ (0 - margin.left/2) +","+(height/2)+")rotate(-90)")
+                .style("font-size", "16px") 
+                .style("font-family", "Arial")  
+                .text("Number of Startup's");
+            
+            document.getElementById('filter_box').style.visibility = 'visible';
+            
+        }
+
+        function get_status(){
+            var selected = [];
+            var status_dd = document.getElementsByClassName('stat_filter');
+            for (var index = 0; index < status_dd.length; index++) {
+                if(status_dd[index].checked){
+                    selected.push(status_dd[index].value);
+                }
+            }
+            return selected;
+        }
+
+        function plot_trend(){
+            var svg = d3.select("#svg_trend"),
+            margin = {top: 20, right: 20, bottom: 30, left: 50},
+            width = +svg.attr("width") - margin.left - margin.right,
+            height = +svg.attr("height") - margin.top - margin.bottom,
+            g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+            var trend_data = d3.nest()
+                                 .key(function(d){ return new Date(d.launched).getFullYear()})
+                                 .rollup(function(v) { return v.length})
+                                 .entries(master_data);
+
+            trend_data = trend_data.sort(function(a, b){ return d3.ascending(a.key, b.key)});
+
+
+            var x = d3.scaleTime().range([0, width]),
+                y = d3.scaleLinear().range([height, 0]);
+
+            var line = d3.line()
+                .x(function(d) { return x( d.key); })
+                .y(function(d) { return y(d.value); });
+
+            x.domain([parseInt(d3.min(trend_data, function(d){return d.key})) - 1, 
+                      parseInt(d3.max(trend_data, function(d){return d.key})) + 1]);
+            y.domain([parseInt(d3.min(trend_data, function(d){return d.value})) - 5000, 
+                      parseInt(d3.max(trend_data, function(d){return d.value})) + 5000]);
+
+            g.append("g")
+              .attr("transform", "translate(0," + height + ")")
+              .call(d3.axisBottom(d3.scaleTime()
+                                    .range([0, width])
+                                    .domain([new Date("January 1, 2012 00:00:00"), new Date("January 4, 2018 00:00:00")])));
+              
+            g.append("g")
+              .call(d3.axisLeft(y))
+              .append("text")
+              .attr("fill", "#000")
+              .attr("transform", "rotate(-90)")
+              .attr("y", 6)
+              .attr("dy", "0.71em")
+              .attr("text-anchor", "end")
+              .text("Number of Startup's");
+
+            g.append("path")
+              .datum(trend_data)
+              .attr("fill", "none")
+              .attr("stroke", "steelblue")
+              .attr("stroke-linejoin", "round")
+              .attr("stroke-linecap", "round")
+              .attr("stroke-width", 1.5)
+              .attr("d", line);
+        }
+    </script>
+
+    <script>
+        var treeMapDate = {
+        "category":"startups",
+        "children":[
+            {"category":"Dance","count":"2117","success_rate":"61.88"},
+            {"category":"Comics","count":"6825","success_rate":"56.95"},
+            {"category":"Theater","count":"4790","success_rate":"56.83"},
+            {"category":"Music","count":"24987","success_rate":"46.64"},
+            {"category":"Art","count":"15428","success_rate":"39.93"},
+            {"category":"Games","count":"20707","success_rate":"38.92"},
+            {"category":"Film & Video","count":"30467","success_rate":"36.63"},
+            {"category":"Design","count":"18613","success_rate":"35.23"},
+            {"category":"Food","count":"17099","success_rate":"25"},
+            {"category":"Fashion","count":"14015","success_rate":"24.67"},
+            {"category":"Crafts","count":"6106","success_rate":"23.67"},
+            {"category":"Publishing","count":"23204","success_rate":"31.52"},
+            {"category":"Photography","count":"5386","success_rate":"29.41"},
+            {"category":"Technology","count":"19824","success_rate":"21.11"},
+            {"category":"Journalism","count":"2848","success_rate":"19.56"}
+        ]
+        }
+        
+        var svg = d3.select("#svg_success"),
+            width = +svg.attr("width"),
+            height = +svg.attr("height");
+        
+        var color = d3.scaleLinear().domain([0,100]).range(["white", "green" ]),
+            format = d3.format(",d");
+        
+        var treemap = d3.treemap()
+            .tile(d3.treemapResquarify)
+            .size([width, height])
+            .round(true)
+            .paddingInner(1);
+        
+        var root = d3.hierarchy(treeMapDate)
+          .eachBefore(function(d) { d.data.id = (d.parent ? d.parent.data.id + "." : "") + d.data.category; })
+          .sum(sumBySuccess_rate)
+          .sort(function(a, b) { return b.height - a.height || b.value - a.value; });
+        
+        treemap(root);
+        
+        var cell = svg.selectAll("g")
+        .data(root.leaves())
+        .enter().append("g")
+          .attr("transform", function(d) { return "translate(" + d.x0 + "," + d.y0 + ")"; });
+        
+        cell.append("rect")
+          .attr("id", function(d) { return d.data.id; })
+          .attr("width", function(d) { return d.x1 - d.x0; })
+          .attr("height", function(d) { return d.y1 - d.y0; })
+          .attr("fill", function(d) { return color(d.data.success_rate); })
+          .attr("class", "treeRect");
+        
+        cell.append("text")
+          .selectAll("tspan")
+          .data(function(d) { 
+          return d.data.category.split(/(?=[A-Z][^A-Z])/g);
+          })
+        .enter().append("tspan")
+          .attr("x", 4)
+          .attr("y", function(d, i) { return 13 + i * 10; })
+          .text(function(d) { return d; });
+        
+        cell.append("title")
+          .text(function(d) { return "Category: " + d.data.category + "\n" + "Number of Startup's: " + d.data.count + "\n" + "Success Rate: " + d.data.success_rate + "%" ; });
+        
+        d3.selectAll("input")
+          .data([sumBySuccess_rate, sumByCount], function(d) { return d ? d.name : this.value; })
+          .on("change", changed);
+        
+        var timeout = d3.timeout(function() {
+        d3.select("input[value=\"sumBySuccess_rate\"]")
+            .property("checked", true)
+            .dispatch("change");
+        }, 2000);
+        
+        function changed(sum) {
+        timeout.stop();
+        
+        treemap(root.sum(sum));
+        
+        cell.transition()
+            .duration(750)
+            .attr("transform", function(d) { 
+            return "translate(" + d.x0 + "," + d.y0 + ")";
+            })
+          .select("rect")
+            .attr("width", function(d) { 
+            return d.x1 - d.x0; 
+            })
+            .attr("height", function(d) { 
+            return d.y1 - d.y0; 
+            });
+        }
+        
+        function sumByCount(d) {
+          return d.count;
+        }
+        
+        function sumBySuccess_rate(d) {
+          return d.success_rate;
+        }
+        
+    </script>
+</body>
+</html>
