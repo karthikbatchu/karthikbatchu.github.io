@@ -171,12 +171,12 @@
                 <li><a id='about' onclick="about_clicked()" href="#">ABOUT THE VISUALIZATION</a></li>
             </ul>
         </div>
-        <div onclick="home_clicked()" id="start-logo">
+        <!-- <div onclick="home_clicked()" id="start-logo">
             <span style="cursor: pointer;"> STORY OF STARTUP'S </span>
         </div>
         <div>
             <img src="light-bulb-7.png" style="width: 37px;float: right; margin-top: 9px;" />
-        </div>
+        </div> -->
     </div>
     <div id="intro">
         <div id="intro-anno">
@@ -219,6 +219,9 @@
                 We can visualize the startup's based on their status using the checkboxes provided. User can interact
                 with the data by selecting or unselecting the checkbox's and it will update the chart accordingly. 
             </p>
+			<p>A tooltip appears on hovering over a bar which display's the exact number of startup's in a category.
+				Also, the hovered bar is highlighted for better user experience.
+			</p>
         </div>
     </div>
 
@@ -235,11 +238,13 @@
             <p>Let's explore the startup's based on the number of startup's in each cateogry and their success rate and we 
                 use a Tree map to do this.
             </p>
-            <p>The industry that has a better successrate will be brighter in color. Though the dancing field has less number of startup's. 
+            <p>The industry that has a better success rate will be brighter in color. Though the dancing field has less number of startup's. 
                 Though it has less number of startup's it has an impressive success rate and it is the brightest block in the chart. 
-                On the other hand Journalism has the least successrate.
+                On the other hand Journalism has the least success rate.
             </p>
-            <p>The radio buttons that we see are used to switch between successrate view and the number of startup's view.
+            <p>The radio buttons that we see are used to switch between success rate view and the number of startup's view. A tooltip is 
+				displayed when user hovers over a block and it will reveal more details about that block. The hovered block is highlighted
+				for a better user experience.
             </p>
         </div>
     </div>
@@ -257,12 +262,13 @@
         </div>
         <div style="font-size: 14px;font-family: Arial; width: 400px;float: right;margin-top: -250px; margin-right: 100px;">
             <h2>Trend of the Startup's</h2>
-            <p>Finally we see the trend of the startup's during 2013 - 2017. We use a line chart to show the trend and 
-                also we highlight the interesting observations.
+            <p>Finally, we see the trend of the startup's during 2013 - 2017. A line chart is used to show the trend and 
+                also the interesting observations are highlighted using circle's and some text to seek attention of the user.
             </p>
             <p>We see that there is an increase in the number of startup's from 2013 to 2015 and then there is a decrease in 
                 the startup's from 2015 to 2017.
             </p>
+			<p>Click any where on the chart to see how the startup's transitioned over the years 2013-2017 more intuitively.</p>
         </div>
     </div>
 
@@ -456,7 +462,7 @@
               .attr("text-anchor", "end")
               .text("Number of Startup's");
 
-            g.append("path")
+            var path = g.append("path")
               .datum(trend_data)
               .attr("fill", "none")
               .attr("stroke", "steelblue")
@@ -464,6 +470,17 @@
               .attr("stroke-linecap", "round")
               .attr("stroke-width", 1.5)
               .attr("d", line);
+			  
+			var totalLength = path.node().getTotalLength();
+
+			svg.on("click", function(){
+			  path.attr("stroke-dasharray", totalLength + " " + totalLength)
+			  .attr("stroke-dashoffset", totalLength)
+			  .transition()
+				.duration(2000)
+				.ease(d3.easeLinear)
+				.attr("stroke-dashoffset", 0);;
+			});
         }
     </script>
 
